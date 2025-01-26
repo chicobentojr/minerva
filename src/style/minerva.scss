@@ -1,0 +1,55 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+body {
+  color: #242424;
+  margin: 0;
+  display: flex;
+  min-height: 100vh;
+}
+
+#root {
+  flex: 1;
+  display: flex;
+  padding: 0;
+  background-color: white;
+}
+
+nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 1rem;
+  border-right: 1px solid #DDD;
+
+
+  
+  a {
+    color:#242424;
+    padding: 0.5rem;
+    
+    &.active {
+      color: #646cff;
+    }
+    
+    &:hover {
+      // color:#242424;
+      // background-color: #bbb;
+      text-decoration: underline;
+    }
+
+  }
+}
+
+section {
+  flex: 1;
+  padding: 1rem;
+  
+
+  h1 {
+    margin: 0;
+  }
+}
