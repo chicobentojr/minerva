@@ -1,4 +1,4 @@
-import reactLogo from './assets/react.svg'
+import reactLogo from '../assets/react.svg'
 import { useState } from 'react'
 import viteLogo from '/vite.svg'
 

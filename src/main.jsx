@@ -1,10 +1,10 @@
-import './style/main.css'
+// import './style/main.css'
 import './style/minerva.scss'
 
 import { Route, Routes } from 'react-router';
 
 import About from './pages/About.jsx';
-import App from './App.jsx'
+import App from './pages/App.jsx'
 import { BrowserRouter } from "react-router";
 import Home from './pages/Home.jsx';
 import Menu from './components/Menu/Menu.jsx';
@@ -17,9 +17,11 @@ ReactDOM.createRoot(root).render(
     <Menu />
     <section>
       <Routes>
-        <Route index path="/" element={<App />} />
-        <Route index path="/home" element={<Home />} />
+        <Route index path="/" element={<Home />} />
         <Route index path="/about" element={<About />} />
+
+
+        <Route index path="/app" element={<App />} />
       </Routes>
     </section>
   </BrowserRouter>,
