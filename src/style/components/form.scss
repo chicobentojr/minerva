@@ -1,8 +1,18 @@
+.tags__controls {
+  background-color: #eee;
+  padding: 1rem;
+  margin: 10px 0;
 
+  display: flex;
+  justify-content: space-between;
+}
 .tags__container {
   display: flex;
-  flex-flow: row wrap;
-  gap: 1rem;
+  flex-flow: column;
+  // gap: 1rem;
+
+  .tag__content {
+  }
 }
 
 .field__container {

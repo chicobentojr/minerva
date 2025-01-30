@@ -6,7 +6,7 @@ const Menu = () => {
     { to: '/', label: 'Home' },
     { to: '/charts', label: 'Charts' },
     { to: '/tags', label: 'Tags' },
-    { to: '/about', label: 'About' },
+    // { to: '/about', label: 'About' },
   ]
 
   const utilsRoutes = [

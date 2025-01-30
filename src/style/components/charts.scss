@@ -1,5 +1,9 @@
 
-
 .chart__container {
-  // background-color: red;
+  max-height: 300px;
+  display: flex;
+  justify-content: center;
+}
+.table__container {
+  // overflow: auto;
 }

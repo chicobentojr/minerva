@@ -1,6 +1,7 @@
-@import url('components/table.scss');
-@import url('components/charts.scss');
-@import url('components/form.scss');
+@import url("components/table.scss");
+@import url("components/charts.scss");
+@import url("components/form.scss");
+@import url("components/antd.scss");
 
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -14,7 +15,7 @@
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale; 
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
@@ -22,6 +23,11 @@ body {
   margin: 0;
   display: flex;
   height: 100vh;
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #eaeaea transparent;
+  }
 }
 
 #root {
@@ -60,23 +66,20 @@ nav {
   flex-direction: column;
   gap: 10px;
   padding: 1rem;
-  border-right: 1px solid #DDD;
+  border-right: 1px solid #ddd;
   max-height: 100vh;
 
-
-  
   a {
-    color:#242424;
+    color: #242424;
     padding: 0.5rem;
-    
+
     &.active {
       color: #646cff;
     }
-    
+
     &:hover {
       text-decoration: underline;
     }
-
   }
 }
 
@@ -85,7 +88,6 @@ section {
   padding: 1rem;
   max-height: 100vh;
   overflow: auto;
-  
+  display: flex;
+  flex-direction: column;
 }
-
-
