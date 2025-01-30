@@ -1,6 +1,7 @@
-import { Button, Col, Form, Input, Row, Select } from 'antd';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { Button, Col, Form, Input, Row, Select, Tooltip } from 'antd';
+import React, { useContext, useEffect, } from 'react';
 
+import { DeleteOutlined } from '@ant-design/icons';
 import { TagsContext } from '../contexts/DataContext';
 import _ from 'lodash';
 import { useForm } from 'antd/es/form/Form';
@@ -16,16 +17,20 @@ const TagsPage = () => {
     setTags([...tags, { label, filters: [] }])
   }
 
+  const handleDeleteTag = (index) => () => {
+    setTags([...tags.slice(0, index), ...tags.slice(index + 1)])
+  }
+
   // const handleUpdateTag = (tag, index) => async () => {
   const handleUpdateTag = async () => {
     console.log('handleUpdateTag');
 
     const values = await form.getFieldsValue()
 
-    const newTags = tags.map((t, index) => {
+    const newTags = tags.map((tag, index) => {
       const label = values[index + 'label']
       const filters = values[index + 'filters']
-      return ({ label, filters })
+      return ({ ...tag, label, filters })
     })
 
     console.log({ values, tags, newTags })
@@ -42,7 +47,7 @@ const TagsPage = () => {
     form.setFieldsValue(values)
   }, [tags])
 
-  console.log({ tags });
+  console.log('tags', tags);
 
   return (
     <>
@@ -69,7 +74,7 @@ const TagsPage = () => {
               <Col span={4}>
                 <h3>{tag.label}</h3>
               </Col>
-              <Col span={10}>
+              <Col span={8}>
                 <Form.Item
                   name={index + 'label'}
                   value={tag.label}
@@ -78,18 +83,22 @@ const TagsPage = () => {
                     value={tag.label} placeholder={'Name'} />
                 </Form.Item>
               </Col>
-              <Col span={10}>
+              <Col span={8}>
                 <Form.Item
                   name={index + 'filters'}
                   value={tag.filters}
                 >
                   <Select
                     mode="tags"
-                    // style={{ width: '100%' }}
                     placeholder="Filters"
                     value={tag.filters}
                   />
                 </Form.Item>
+              </Col>
+              <Col span={4}>
+                <Tooltip title="Remove">
+                  <Button onClick={handleDeleteTag(index)} icon={<DeleteOutlined />} />
+                </Tooltip>
               </Col>
             </Row>))}
         </div>

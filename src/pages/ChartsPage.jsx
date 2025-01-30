@@ -1,8 +1,9 @@
 import { DataRawContext, TagsContext } from '../contexts/DataContext';
 import React, { useContext, useMemo, useRef, useState } from 'react';
-import { filterData, isRowFromTag } from '../services/tags';
+import { filterData, getOnlyRestItems, getTagItems, isRowFromTag } from '../services/tags';
 
 import { Bar } from 'react-chartjs-2';
+import { Button } from 'antd';
 import { REST_TAG } from '../utils/constants';
 import RawTable from '../components/Table/RawTable';
 import _ from 'lodash';
@@ -12,7 +13,8 @@ const ChartsPage = () => {
   const chartRef = useRef()
   // const rawData = useContext(DataRawContext).slice(0, 20)
 
-  const [filteredElements, setFilteredElements] = useState(null);
+  const [filteredTag, setFilteredTag] = useState(null);
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
   const options = {
     responsive: true,
@@ -27,20 +29,18 @@ const ChartsPage = () => {
     },
   };
 
-  const { tags: baseTags } = useContext(TagsContext);
+  const { tags: baseTags, setTags } = useContext(TagsContext);
   const tags = [...baseTags, REST_TAG]
 
   // console.log({ tags })
 
-  let tagsValues = {}
-  tags.forEach(t => tagsValues[t.label] = 0);
+  // let tagsValues = {}
+  // tags.forEach(t => tagsValues[t.label] = 0);
 
-
-
-  rawData.forEach((row) => {
-    const tagFound = tags.find((tag) => isRowFromTag(row, tag));
-    tagsValues[tagFound.label] += row.value
-  })
+  // rawData.forEach((row) => {
+  //   const tagFound = tags.find((tag) => isRowFromTag(row, tag));
+  //   tagsValues[tagFound.label] += row.value
+  // })
 
 
 
@@ -49,13 +49,13 @@ const ChartsPage = () => {
     datasets: [
       {
         label: 'Total Gasto R$',
-        data: tags.map((t) => tagsValues[t.label]),
+        data: tags.map((t) => _.sumBy(t.onlyRestItems ? getOnlyRestItems(rawData, baseTags) : getTagItems(t, rawData), 'value')),
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
       },
       // {
       //     label: 'Dataset 2',
       //     data: labels.map(() => Number.parseInt(Math.random() * 1000)),
-      //     backgroundColor: 'rgba(53, 162, 235, 0.5)',
+      // backgroundColor: 'rgba(53, 162, 235, 0.5)',
       // },
     ],
   };
@@ -64,29 +64,27 @@ const ChartsPage = () => {
     const chart = chartRef.current;
     const xClick = chart.scales.x.getValueForPixel(event.nativeEvent.offsetX);
     const barElement = chart.getDatasetMeta(0).data[xClick];
-    const barClicked = {
+    const selectedTag = {
       label: chart.data.labels[barElement.$context.index],
       value: barElement.$context.raw
     }
 
-    // console.log({ barClicked })
-
-    if (barClicked.label === filteredElements?.label) {
-      setFilteredElements(null)
+    if (selectedTag.label === filteredTag?.label) {
+      setFilteredTag(null)
     } else {
-      setFilteredElements(barClicked)
+      setFilteredTag(selectedTag)
     }
-
-
   }
 
 
   const filteredData = useMemo(() => {
-    const tag = tags.find((t) => t.label === filteredElements?.label)
+    const tag = tags.find((t) => t.label === filteredTag?.label)
     if (tag) {
       const isRestTag = tag == REST_TAG
 
-      return isRestTag ? filterData(rawData, baseTags, isRestTag) : filterData(rawData, [tag], isRestTag)
+      return isRestTag ?
+        filterData(rawData, baseTags, isRestTag) :
+        getTagItems(tag, rawData)
     }
 
     return []
@@ -94,24 +92,44 @@ const ChartsPage = () => {
 
 
 
-  }, [filteredElements])
-
-  // const othersData = useMemo(() => {
-  //   return filterData(rawData, tags);
-  // }, [tags])
+  }, [filteredTag])
 
 
-  console.log({ rawData, tags, tagsValues, filteredData, filteredElements, data })
+  const handleCreateTag = () => {
+    const selectedRows = selectedRowKeys.map((k) => filteredData[k])
+    console.log('selectedRows', selectedRows)
 
+
+    const newTag = {
+      label: `Tag #${baseTags.length + 1}`,
+      itemsKey: selectedRowKeys,
+    }
+
+    console.log({ newTag })
+
+    setTags([...baseTags, newTag])
+    setFilteredTag(newTag)
+  }
+
+
+  // console.log({ rawData, tags, tagsValues, filteredData, filteredElements, data })
   return (
     <>
-      <h1>Charts</h1>
+      <h2>Charts</h2>
       <div className='chart__container'>
         <Bar ref={chartRef} options={options} data={data} onClick={onChartClick} />
 
       </div>
+      <div>
+
+        <Button disabled={!selectedRowKeys.length} onClick={handleCreateTag}>Create Tag {selectedRowKeys.length ? `(${selectedRowKeys.length} items)` : ''}</Button>
+      </div>
       <div className='table__container'>
-        {filteredData.length !== 0 && <RawTable title={filteredElements.label} rawData={filteredData} />}
+        {filteredData.length !== 0 &&
+          <RawTable
+            onSelect={(newKeys) => { console.log('newkeys', newKeys); setSelectedRowKeys(newKeys) }}
+            title={filteredTag.label}
+            rawData={filteredData} />}
       </div>
     </>
   )

@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 import { Table } from "antd";
 import _ from "lodash";
 import { createStyles } from 'antd-style';
@@ -22,15 +24,13 @@ const useStyle = createStyles(({ css, token }) => {
   };
 });
 
-const RawTable = ({ title = 'Raw Table', rawData }) => {
+const RawTable = ({ title = 'Raw Table', rawData, onSelect }) => {
   const { styles } = useStyle();
 
-
-  const data = rawData.map((row, idx) => ({
-    ...row,
-    key: idx,
-    isoDate: moment(row.date, 'DD/MM/YYYY').toISOString()
-  }))
+  const data = rawData
+  // const data = rawData.map((row, idx) => ({
+  //   ...row
+  // }))
 
   const columns = [
     {
@@ -47,36 +47,56 @@ const RawTable = ({ title = 'Raw Table', rawData }) => {
     },
   ]
 
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+
+  const onSelectChange = (newSelectedRowKeys) => {
+    console.log('selectedRowKeys changed: ', newSelectedRowKeys);
+    setSelectedRowKeys(newSelectedRowKeys);
+  };
+
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onSelectChange,
+    selections: [
+      Table.SELECTION_ALL,
+      Table.SELECTION_INVERT,
+      Table.SELECTION_NONE
+    ],
+  };
+
+  // console.log({ selectedRowKeys })
+
+  useEffect(() => {
+    onSelect && onSelect(selectedRowKeys);
+  }, [selectedRowKeys])
+  useEffect(() => {
+
+    setSelectedRowKeys([]);
+  }, [data.length])
+
+
   return (
     <>
       <h3>{title} ({data.length} items) | total: {formatMoney(_.sumBy(data, 'value'))})</h3>
       <Table
+        size="small"
         className={styles.customTable}
-        // rowSelection={{ type: selectionType, ...rowSelection }}
+        onRow={(record, rowIndex) => ({
+          onClick: (event) => {
+            selectedRowKeys.includes(record.key) ?
+              setSelectedRowKeys(selectedRowKeys.filter((k) => k != record.key)) :
+              setSelectedRowKeys([...selectedRowKeys, record.key])
+          }
+        })}
+        rowSelection={{ type: 'checkbox', ...rowSelection }}
         columns={columns}
         dataSource={data}
+        pagination={{ pageSize: 20 }}
+
         scroll={{
-          y: 55 * 7,
+          y: 39 * 10,
         }}
       />
-      {/* <table>
-        <thead>
-          <tr>
-            <th>Data</th>
-            <th>Label</th>
-            <th>Value</th>
-          </tr>
-        </thead>
-        <tbody>{
-          rawData.map((row, index) => (
-            <tr key={index}>
-              <td>{row.date}</td>
-              <td>{row.label}</td>
-              <td>{formatMoney(row.value)}</td>
-            </tr>
-          ))
-        }</tbody>
-      </table> */}
     </>
   );
 };
