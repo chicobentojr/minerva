@@ -4,6 +4,7 @@ const Menu = () => {
 
   const routes = [
     { to: '/', label: 'Home' },
+    { to: '/charts', label: 'Charts' },
     { to: '/about', label: 'About' },
   ]
 

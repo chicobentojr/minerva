@@ -1,10 +1,9 @@
+import { formatMoney } from "../../utils/formatters";
 
-const RawTable = ({ rawData }) => {
-  // const data = useContext(DataRawContext)
-  console.log("rawtable", rawData);
+const RawTable = ({ title = 'Raw Table', rawData }) => {
   return (
     <>
-      <h3>RawTable</h3>
+      <h3>{title}</h3>
       <table>
         <thead>
           <tr>
@@ -18,7 +17,7 @@ const RawTable = ({ rawData }) => {
             <tr key={index}>
               <td>{row.date}</td>
               <td>{row.label}</td>
-              <td>{row.value}</td>
+              <td>{formatMoney(row.value)}</td>
             </tr>
           ))
         }</tbody>
