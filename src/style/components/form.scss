@@ -1,0 +1,17 @@
+
+.tags__container {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 1rem;
+}
+
+.field__container {
+  margin: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+input {
+  background-color: white;
+}

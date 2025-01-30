@@ -1,9 +1,10 @@
+import _ from "lodash";
 import { formatMoney } from "../../utils/formatters";
 
 const RawTable = ({ title = 'Raw Table', rawData }) => {
   return (
     <>
-      <h3>{title}</h3>
+      <h3>{title} [{rawData.length + 1}] ({formatMoney(_.sumBy(rawData, 'value'))})</h3>
       <table>
         <thead>
           <tr>
