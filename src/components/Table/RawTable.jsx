@@ -91,7 +91,7 @@ const RawTable = ({ title = 'Raw Table', rawData, onSelect }) => {
         rowSelection={{ type: 'checkbox', ...rowSelection }}
         columns={columns}
         dataSource={data}
-        pagination={{ pageSize: 20 }}
+        pagination={{ pageSize: 100 }}
 
         scroll={{
           y: 39 * 10,

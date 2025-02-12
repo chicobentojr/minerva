@@ -69,10 +69,10 @@ const TagsPage = () => {
           {tags.map((tag, index) => (
 
             <Row className='tag__content' key={index}
-              align={'middle'}
+              // align={'start'}
               gutter={10}>
               <Col span={4}>
-                <h3>{tag.label}</h3>
+                <h3 style={{ margin: '0' }}>{tag.label}</h3>
               </Col>
               <Col span={8}>
                 <Form.Item

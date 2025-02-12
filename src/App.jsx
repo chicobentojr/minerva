@@ -11,15 +11,16 @@ import TagsPage from './pages/TagsPage.jsx';
 import { useState } from 'react';
 
 function App() {
-  const data = loadData();
+  // const data = loadData();
   const [tags, setTags] = useState(loadTags());
+  const [data, setData] = useState(loadData());
 
   console.log('main data', data)
 
 
   return (
     <BrowserRouter basename='/minerva'>
-      <DataRawContext.Provider value={data}>
+      <DataRawContext.Provider value={{ data, setData }}>
         <TagsContext.Provider value={{ tags, setTags }}>
           <Menu />
           <section>

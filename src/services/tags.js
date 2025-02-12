@@ -21,6 +21,17 @@ export const isRowFromTag = (row, tag) => {
   return hasMatch;
 };
 
+export const filterByTag = (data, tag) => {
+  return data.filter((row) =>
+    tag ? row.tags.includes(tag.label) : row.tags.length === 0
+  );
+  // if (tag.itemsKey) {
+  //   return tag.itemsKey.map((key) => data[key]);
+  // }
+
+  // return filterData(data, [tag]);
+};
+
 export const getTagItems = (tag, data) => {
   if (tag.itemsKey) {
     return tag.itemsKey.map((key) => data[key]);
